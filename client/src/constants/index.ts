@@ -21,7 +21,7 @@ export const navlinks: NavLink[] = [
   {
     name: 'profile',
     imgUrl: profile,
-    link: '/profile',
+    link: '/register',
   },
   {
     name: 'logout',
