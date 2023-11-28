@@ -16,7 +16,7 @@ export const navlinks: NavLink[] = [
   {
     name: 'bookTable',
     imgUrl: book,
-    link: '/book-table',
+    link: '/table-booking',
   },
   {
     name: 'profile',
