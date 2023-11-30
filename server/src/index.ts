@@ -9,20 +9,21 @@ import {
     ApolloServerPluginLandingPageGraphQLPlayground,
     ApolloServerPluginLandingPageProductionDefault,
   } from "apollo-server-core";
+import { resolvers } from "./resolvers"
 
 async function bootstrap(){
     // Build the schema
-    // const schema = buildSchema({
-    //     //resolvers,
-    //     //authChecker
-    // })
+    const schema = await buildSchema({
+        resolvers,
+        // authChecker
+    })
     // Init express
     const app = express();
     app.use(cookieParser())
     // Create the apollo server
     const server = new ApolloServer({
-        //schema,   19:56
-        context: (ctx: any) => {
+        schema,
+        context: (ctx) => {
             return ctx
         },
         plugins: [
@@ -32,8 +33,14 @@ async function bootstrap(){
     await server.start()
 
     // apply middleware to server
+    server.applyMiddleware({ app });
 
     // app.listen on express server
+    app.listen({ port: 4000 }, () => {
+        console.log("App is listening on http://localhost:4000");
+    })
+
+    // Connect to db
 
 
 }
