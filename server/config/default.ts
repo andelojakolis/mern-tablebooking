@@ -1,3 +1,3 @@
 export default {
-    dbUri: "mongodb://localhost:27017/table-booking",
+    dbUri: "mongodb://localhost:2701/restaurant",
 }

@@ -1,14 +1,12 @@
 version: '3.8'
 services:
   mongo:
-    image: mongo:7.0
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ajakolis
-      MONGO_INITDB_ROOT_PASSWORD: TestPassword
+    image: mongo:latest
+    restart: always
+    container_name: mongo-local
     ports:
-      - 27017:27017
+      - 2701:27017
     volumes:
-      - mongodata:/data
+      - mongodb-data:/data/db
 volumes:
-  mongodata:
-    driver: local
+  mongodb-data:
