@@ -1,20 +1,17 @@
 import config from '../../config/custom-environment-variables'
 import jwt from 'jsonwebtoken';
 
-const publicKey = Buffer.from(config.publicKey, "base64").toString('ascii');
-const privateKey = Buffer.from(config.privateKey, "base64").toString('ascii');
+const publicKey = config.publicKey
+const privateKey = config.privateKey
 
 
-export function signJwt(payload: Object, options?: jwt.SignOptions | undefined){
-    return jwt.sign(payload, privateKey, {
-        ...(options && options),
-        algorithm: 'RS256',
-    })
+export function signJwt(payload: Object){
+    return jwt.sign(payload, privateKey)
 }
 
-export function verifyJwt<T>(token: string): T | null {
+export function verifyJwt<User>(token: string): User | null {
     try {
-        const decoded = jwt.verify(token, publicKey) as T;
+        const decoded = jwt.verify(token, privateKey) as User;
         return decoded;
     } catch (error) {
         return null

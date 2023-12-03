@@ -3,10 +3,16 @@ import { CreateUserInput, LoginInput, UserModel } from "../schema/user.schema";
 import bcrypt from 'bcrypt'
 import { signJwt } from "../utils/jwt";
 import Context from "../types/context"
+import { ObjectId } from "mongoose";
 
 class UserService {
     async createUser(input: CreateUserInput) {
+      const user = await this.findByEmail(input.email)
+      if(!user){
         return UserModel.create(input)
+      } else {
+        throw new ApolloError('User with this email already exists!')
+      }
     }
 
     async login(input: LoginInput, context: Context) {
@@ -16,7 +22,12 @@ class UserService {
         const isPasswordValid = await bcrypt.compare(input.password, user.password)
         if(!isPasswordValid) throw new ApolloError('Invalid email or password!')
 
-        const token = signJwt(user);
+        const jwtPayload = {
+          _id: user.id,
+          name: user.name,
+          email: user.email
+        }
+        const token = signJwt(jwtPayload);
 
         context.res.cookie("accessToken", token, {
             maxAge: 3.154e10,
