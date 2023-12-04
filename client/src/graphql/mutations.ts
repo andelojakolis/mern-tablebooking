@@ -9,3 +9,8 @@ mutation CreateUser($input: CreateUserInput!) {
     }
   }
 `;
+
+export const LOGIN_USER = gql`
+mutation LoginUser($input: LoginInput!) {
+  login(input: $input)
+}`
