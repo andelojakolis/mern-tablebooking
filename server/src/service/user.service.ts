@@ -3,7 +3,6 @@ import { CreateUserInput, LoginInput, UserModel } from "../schema/user.schema";
 import bcrypt from 'bcrypt'
 import { signJwt } from "../utils/jwt";
 import Context from "../types/context"
-import { ObjectId } from "mongoose";
 
 class UserService {
     async createUser(input: CreateUserInput) {
