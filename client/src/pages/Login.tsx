@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Link, useNavigate } from 'react-router-dom';
+import { Icon } from 'react-icons-kit'
+import { eyeOff } from 'react-icons-kit/feather/eyeOff'
+import { eye } from 'react-icons-kit/feather/eye'
 
 import { LOGIN_USER } from "../graphql/mutations"
 
 function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [type, setType] = useState('password');
+  const [icon, setIcon] = useState(eyeOff);
   const navigate = useNavigate();
 
   const[loginUser] = useMutation(LOGIN_USER)
@@ -21,11 +26,21 @@ function Login() {
     }
   };
 
+  const handleToggle = () => {
+    if (type==='password'){
+       setIcon(eye);
+       setType('text')
+    } else {
+       setIcon(eyeOff)
+       setType('password')
+    }
+  }
+
   return (
     <div className='flex justify-center'>
-      <div className="bg-[#5cbdb9] w-60 sm:w-96 sm:mt-[60px] border-2 rounded-lg">
+      <div className="bg-[white] w-60 sm:w-96 sm:mt-[60px] border-2 rounded-lg">
         <div className="my-8">
-          <h2 className="font-bold text-xl font-epilogue m-6 text-center">Login</h2>
+          <h2 className="font-bold text-xl font-epilogue m-6 text-center text-[#5cbdb9]">Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col w-[80%] mx-4">
               <label htmlFor="email" className="font-epilogue font-semibold p-2">
@@ -45,14 +60,17 @@ function Login() {
                 Password
               </label>
               <input
-                type="password"
+                type={type}
                 placeholder="Enter Password"
                 name="password"
-                className=""
+                className="caret-white"
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <span className="flex justify-around items-center" onClick={handleToggle}>
+                  <Icon className="absolute sm:ml-64 ml-40 mb-6" icon={icon} size={24}/>
+              </span>
             </div>
-            <button type="submit" className="font-epilogue font-semibold px-4 rounded-[10px] border text-[#5cbdb9] border-solid bg-[#fbe3e8] m-3 h-10">
+            <button type="submit" className="font-epilogue font-semibold px-4 rounded-[10px] border text-[white] border-solid bg-[#5cbdb9] m-3 h-10">
               Login
             </button>
           </form>
