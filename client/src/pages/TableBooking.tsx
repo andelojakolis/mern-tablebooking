@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import Table from '../components/Table';
+import { restaurant, table } from '../assets';
 
 const TableBooking: React.FC = () => {
 
@@ -48,7 +49,19 @@ const TableBooking: React.FC = () => {
   const fetchedArray = [1,6,8]
 
   return (
-    <div className='flex flex-col'>
+    <div className='relative'>
+      <img className='h-[80vh] m-auto sm:w-[60%] w-full z-0' src={restaurant} alt="Restaurant Floor Plan" />
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] left-[45%]'><img onClick={() => handleImageClick(1)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] left-[55%]'><img onClick={() => handleImageClick(2)} className='opacity-25 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] left-[65%]'><img onClick={() => handleImageClick(3)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[45%] left-[50%]'><img onClick={() => handleImageClick(4)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[45%] left-[60%]'><img onClick={() => handleImageClick(5)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[20%] left-[50%]'><img onClick={() => handleImageClick(6)} className='opacity-25 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[20%] left-[60%]'><img onClick={() => handleImageClick(7)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] left-[45%]'><img onClick={() => handleImageClick(8)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] left-[54%]'><img onClick={() => handleImageClick(9)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] left-[63%]'><img onClick={() => handleImageClick(10)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div> 
+    {/*<div className='flex flex-col'>
       {[1, 2, 3].map((row) => (
         <div key={row} className='flex flex-row justify-normal gap-2'>
           {[1, 2, 3].map((col) => {
@@ -67,7 +80,7 @@ const TableBooking: React.FC = () => {
           })}
         </div>
       ))}
-      {/* <div className='flex flex-row justify-normal gap-2'>
+       <div className='flex flex-row justify-normal gap-2'>
         <div className='sm:ml-8 ml-2 basis-1/3'><img onClick={() => handleImageClick(1)} className='cursor-pointer opacity-75' src={table} alt="Table image" width={200} height={100}/></div>
         <div className='sm:ml-8 ml-2 basis-1/3'><img onClick={() => handleImageClick(2)} className='opacity-25' src={table} alt="Table image" width={200} height={100}/></div>
         <div className='sm:ml-8 ml-2 basis-1/3'><img onClick={() => handleImageClick(3)} className='cursor-pointer opacity-75' src={table} alt="Table image" width={200} height={100}/></div>
@@ -83,10 +96,11 @@ const TableBooking: React.FC = () => {
         <div className='sm:ml-8 ml-2 basis-1/3'><img onClick={() => handleImageClick(7)} className='cursor-pointer opacity-75' src={table} alt="Table image" width={200} height={100}/></div>
         <div className='sm:ml-8 ml-2 basis-1/3'><img onClick={() => handleImageClick(8)} className='cursor-pointer opacity-75' src={table} alt="Table image" width={200} height={100}/></div>
         <div className='sm:ml-8 ml-2 basis-1/3'><img onClick={() => handleImageClick(9)} className='cursor-pointer opacity-75' src={table} alt="Table image" width={200} height={100}/></div>
-      </div> */}
-
+      </div> 
+</div>*/}
+<div>{/** kalendar i rucak/vecera */}</div>
       {isModalOpen && (
-        <div onClick={handleModalClick} className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
+        <div onClick={handleModalClick} className='z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
           <div className='bg-white p-8 rounded shadow-lg'>
             <div className='modal-content'>
             <form onSubmit={handleSubmit}>
