@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
           </Link>
       </div>
 
-      <div className='sm:hidden flex justify-between items-center relative'>
+      <div className='z-30 sm:hidden flex justify-between items-center relative'>
         <div className='w-[40px] h-[40px] rounded-[10px] bg-[#5cbdb9] flex justify-center items-center cursor-pointer'>
           <img src={forkknife} alt="user" className='w-[60%] h-[60%] object-contain' onClick={() => {navigate('/')}}/>
         </div>

@@ -49,18 +49,27 @@ const TableBooking: React.FC = () => {
   const fetchedArray = [1,6,8]
 
   return (
-    <div className='relative'>
-      <img className='h-[80vh] m-auto sm:w-[60%] w-full z-0' src={restaurant} alt="Restaurant Floor Plan" />
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] left-[45%]'><img onClick={() => handleImageClick(1)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] left-[55%]'><img onClick={() => handleImageClick(2)} className='opacity-25 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] left-[65%]'><img onClick={() => handleImageClick(3)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[45%] left-[50%]'><img onClick={() => handleImageClick(4)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[45%] left-[60%]'><img onClick={() => handleImageClick(5)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[20%] left-[50%]'><img onClick={() => handleImageClick(6)} className='opacity-25 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[20%] left-[60%]'><img onClick={() => handleImageClick(7)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] left-[45%]'><img onClick={() => handleImageClick(8)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] left-[54%]'><img onClick={() => handleImageClick(9)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
-      <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] left-[63%]'><img onClick={() => handleImageClick(10)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div> 
+    <div className='flex sm:flex-row flex-col relative'>
+      <div className='relative w-[90vw]'>
+        <img className='sm:h-[80vh] h-[50vh] m-auto sm:w-[60%]  z-0 rounded-lg' src={restaurant} alt="Restaurant Floor Plan" />
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] left-[45%]'><img onClick={() => handleImageClick(1)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] sm:left-[55%] left-[60%]'><img onClick={() => handleImageClick(2)} className='opacity-25 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[30%] sm:left-[65%] left-[75%]'><img onClick={() => handleImageClick(3)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[45%] sm:left-[50%] left-[55%]'><img onClick={() => handleImageClick(4)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute top-[45%] sm:left-[60%] left-[70%]'><img onClick={() => handleImageClick(5)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[20%] sm:left-[50%] left-[55%]'><img onClick={() => handleImageClick(6)} className='opacity-25 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[20%] sm:left-[60%] left-[70%]'><img onClick={() => handleImageClick(7)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] left-[45%]'><img onClick={() => handleImageClick(8)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] sm:left-[54%] left-[59%]'><img onClick={() => handleImageClick(9)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+        <div className='sm:ml-8 ml-2 basis-1/3 z-10 absolute bottom-[3%] sm:left-[63%] left-[72%]'><img onClick={() => handleImageClick(10)} className='cursor-pointer opacity-75 sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]' src={table} alt="Table image"/></div>
+      </div>
+      <div className='font-epilogue sm:w-[19vw] w-[90vw] h-[22vh] absolute sm:left-[20%] left-[-4px] sm:bottom-[1px] bottom-[-50%] rounded-lg text-left p-4'>
+        <label htmlFor="">Date: </label>
+        <input type="date" name="" id="" /><br />
+        <label htmlFor="lunch">Lunch </label> <input type="radio" name="mealType" id="lunch" /><br />
+        <label htmlFor="dinner">Dinner </label> <input type="radio" name="mealType" id="dinner" /><br />
+        <button className='font-epilogue font-semibold text-[16px] leading-[26px] text-[white] min-h-[52px] px-4 rounded-[10px] border border-solid border-[white] sm:ml-11 ml-7 mt-2 bg-[#5cbdb9]' type="submit">Check availability</button>
+      </div> 
     {/*<div className='flex flex-col'>
       {[1, 2, 3].map((row) => (
         <div key={row} className='flex flex-row justify-normal gap-2'>
