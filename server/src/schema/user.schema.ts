@@ -28,6 +28,18 @@ export class User {
     // for password we wont be using graphql type
     @prop({required: true})
     password: string
+
+    @Field(() => String, { defaultValue: 'user' })
+    @prop({ default: 'user' })
+    role: string;
+
+    @Field(() => Number, { defaultValue: 0 })
+    @prop({ default: 0 })
+    reserved: number;
+
+    @Field(() => Number, { defaultValue: 0 })
+    @prop({ default: 0 })
+    cancelled: number;
 }
 
 export const UserModel = getModelForClass(User)
