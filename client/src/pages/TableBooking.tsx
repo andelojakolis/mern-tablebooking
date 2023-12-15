@@ -119,7 +119,7 @@ const TableBooking: React.FC = () => {
                 </label><br /><br />
                 <label className='font-epilogue font-semibold'>
                   Date: 
-                  <input className='px-2' type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                  <input className='px-2' type="date" value={filterDate} onChange={(e) => setDate(e.target.value)} />
                 </label><br /><br />
                 <label className='font-epilogue font-semibold'>
                   Time:
@@ -131,11 +131,11 @@ const TableBooking: React.FC = () => {
                 </label><br /><br />
                 <div>
                   <label className='font-epilogue font-semibold'>
-                    <input type="radio" name="mealType" value="lunch" checked={mealType === 'lunch'} onChange={() => setMealType('lunch')} />
+                    <input type="radio" name="mealType" value="lunch" checked={filterMealType === 'lunch'} onChange={() => setMealType('lunch')} />
                     Lunch
                   </label><br />
                   <label className='font-epilogue font-semibold'>
-                    <input type="radio" name="mealType" value="dinner" checked={mealType === 'dinner'} onChange={() => setMealType('dinner')} />
+                    <input type="radio" name="mealType" value="dinner" checked={filterMealType === 'dinner'} onChange={() => setMealType('dinner')} />
                     Dinner
                   </label><br /><br />
                 </div>
