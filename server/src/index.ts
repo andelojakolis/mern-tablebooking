@@ -12,6 +12,7 @@ import {
 import { resolvers } from "./resolvers"
 import { connectToMongo } from "./utils/mongo";
 import { verifyJwt } from "./utils/jwt";
+import authChecker from "./utils/authChecker";
 import { User } from "./schema/user.schema";
 import Context from "./types/context";
 
@@ -19,7 +20,7 @@ async function bootstrap(){
     
     const schema = await buildSchema({
         resolvers,
-        // authChecker
+        authChecker
     })
     
     const app = express();

@@ -1,75 +1,74 @@
-import { Ref, getModelForClass, prop } from "@typegoose/typegoose";
-import { Field, InputType, ObjectType } from "type-graphql";
+import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
+import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { User } from "./user.schema";
+import { Max, Min } from "class-validator";
 
 @ObjectType()
 export class Reservation {
-    @Field(() => String)
-    _id: string
+  @Field(() => String)
+  _id: string;
 
-    @Field(() => String)
-    @prop({ required: true })
-    date: string
+  @Field(() => String)
+  @prop({required:true})
+  date: string;
 
-    @Field(() => String)
-    @prop({ required: true })
-    mealType: string
+  @Field(() => String)
+  @prop({required:true})
+  mealType: string;
 
-    @Field(() => [TableInfo])
-    @prop({ required: true })
-    tableInfo: TableInfo[]
+  @Field(() => [TableInfo])
+  @prop({ type: () => [TableInfo], })
+  tableInfo: TableInfo[];
 }
 
 @ObjectType()
 export class TableInfo {
-    @Field(() => Number)
-    @prop({ required: true })
-    tableNumber: number
+  @Field(() => User)
+  @prop({  ref: () => User })
+  user: User;
 
-    @Field(() => String)
-    @prop({ required: true })
-    time: string
+  @Field(() => String)
+  @prop({required:true})
+  time: string;
 
-    @Field(() => String)
-    @prop({ required: true, ref: () => User })
-    user: Ref<User>
+  @Field(() => Number)
+  @prop({required:true})
+  persons: number;
 
-    @Field(() => Number)
-    @prop({ required: true })
-    persons: number
+  @Field(() => Number)
+  @prop({required:true})
+  tableNumber: number;
 }
 
-export const ReservationModel = getModelForClass<typeof Reservation>(Reservation)
+export const ReservationModel = getModelForClass<typeof Reservation>(Reservation);
 
 @InputType()
-export class MakeReservationInput {
-    @Field()
-    tableNumber: number
+export class CreateReservationInput {
+  @Field(() => Int)
+  @Min(1)
+  @Max(10)
+  tableNumber: number;
 
-    @Field()
-    date: string
+  @Field()
+  date: string;
 
-    @Field()
-    mealType: string
+  @Field()
+  time: string;
 
-    @Field()
-    time: string
+  @Field(() => Int)
+  @Min(1)
+  @Max(4)
+  persons: number;
 
-    @Field()
-    persons: number
+  @Field()
+  mealType: string;
 }
 
-// @InputType()
-// export class GetMyReservationInput {
-//     @Field()
-//     userId: string;
-// }   for cancelling reservation
-
 @InputType()
-export class GetTablesInput {
-    @Field()
-    date: string
+export class GetReservationsInput {
+  @Field()
+  date: string;
 
-    @Field()
-    mealType: string
+  @Field()
+  mealType: string;
 }
