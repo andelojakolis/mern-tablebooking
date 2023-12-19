@@ -1,6 +1,6 @@
 import { getModelForClass, pre, prop } from "@typegoose/typegoose";
 import bcrypt from 'bcrypt';
-import { IsEmail, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsString, MaxLength, MinLength } from "class-validator";
 import { Field, ObjectType, InputType } from "type-graphql";
 
 @pre<User>('save', async function (){
@@ -77,5 +77,11 @@ export class LoginInput {
     })
     @Field(() => String)
     password: string
+}
 
+@InputType()
+export class GetUserInfoInput {
+    @Field()
+    @IsString()
+    _id: string;
 }

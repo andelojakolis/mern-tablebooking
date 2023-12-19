@@ -1,8 +1,8 @@
 import { ApolloError } from "apollo-server";
-import { CreateUserInput, LoginInput, UserModel } from "../schema/user.schema";
-import bcrypt from 'bcrypt'
+import { CreateUserInput, GetUserInfoInput, LoginInput, UserModel } from "../schema/user.schema";
+import bcrypt from 'bcrypt';
 import { signJwt } from "../utils/jwt";
-import Context from "../types/context"
+import Context from "../types/context";
 
 class UserService {
     async createUser(input: CreateUserInput) {
@@ -42,6 +42,11 @@ class UserService {
 
     async findByEmail(email: string) {
         return await UserModel.findOne({email})
+    }
+
+    async getUserById(input: GetUserInfoInput) {
+      const data = await UserModel.findOne(input)
+      return data
     }
 }
 

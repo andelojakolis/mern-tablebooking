@@ -1,6 +1,6 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import {
-  CreateReservationInput, GetReservationsInput, Reservation
+  CreateReservationInput, GetReservationInput, Reservation
 } from "../schema/reservation.schema";
 import ReservationService from "../service/reservation.service";
 import Context from "../types/context";
@@ -18,21 +18,11 @@ export default class ReservationResolver {
     @Ctx() context: Context
   ) {
     const user = context.user!;
-    console.log(user)
     return this.reservationService.createReservation({ ...input, user });
   }
 
-  @Authorized()
   @Query(() => [Number])
-  getReservations(
-    @Arg("input") input: GetReservationsInput
-  ) {
-    console.log('nesto')
+  getReservations(@Arg("input") input: GetReservationInput) {
     return this.reservationService.getReservations(input);
   }
-
-  // @Query(() => Product)
-  // product(@Arg("input") input: GetProductInput) {
-  //   return this.productService.findSingleProduct(input);
-  // }
 }
