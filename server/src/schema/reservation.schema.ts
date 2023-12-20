@@ -1,7 +1,7 @@
 import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { User } from "./user.schema";
-import { IsDate, IsString, Max, Min } from "class-validator";
+import { IsString, Max, Min } from "class-validator";
 
 @ObjectType()
 export class Reservation {

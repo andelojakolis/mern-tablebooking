@@ -54,7 +54,7 @@ import {
         const data = await this.getReservationsByDateAndMealType(date, mealType);
     
         if (!data) {
-          console.log('No reservations found.');
+          throw new ApolloError('There are no reservations');
           return null; 
         }
         const tableNumberArray: number[] = data.tableInfo.map(tableNumber => tableNumber.tableNumber);

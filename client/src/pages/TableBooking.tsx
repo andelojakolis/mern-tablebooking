@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 
 import Table from '../components/Table';
 import { restaurant } from '../assets';
+import client from '../graphql/auth';
+import { CHECK_AVAILABILITY, CREATE_RESERVATION } from '../graphql/mutations';
+import { useMutation } from '@apollo/client';
 
 const TableBooking: React.FC = () => {
 
@@ -13,6 +16,9 @@ const TableBooking: React.FC = () => {
   const [mealType, setMealType] = useState<string>('lunch');
   const [filterDate, setFilterDate] = useState('');
   const [filterMealType, setFilterMealType] = useState('');
+  //const [isReserved, setIsReserved] = useState<number[]>([]);
+
+  const [createReservation] = useMutation(CREATE_RESERVATION, { client });
 
   const openModal = (index: number) => {
     setSelectedImageIndex(index);
@@ -34,17 +40,25 @@ const TableBooking: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = {
       tableNumber: selectedImageIndex,
-      date,
+      date: filterDate,
       time,
       persons,
-      mealType,
+      mealType: filterMealType,
     };
-    console.log(formData);
     // send to backend
+    try {
+      await createReservation({
+        variables: { input: formData },
+      });
+
+      closeModal();
+    } catch (error) {
+      console.error('Error creating reservation:', error);
+    }
     closeModal();
   };
 
@@ -72,12 +86,12 @@ const TableBooking: React.FC = () => {
     setFilterMealType(event.target.value);
   };
 
-  const handleFilterSubmit = () => {
-    // send to backend
-    console.log({ filterDate, filterMealType });
-  };
+  let fetch: number[] = [1,2,3];
 
-  const fetch = [7,8,9,10]
+  const handleFilterSubmit = async () => {
+    //
+  };
+  console.log(fetch)
 
   return (
     <div className='flex sm:flex-row flex-col relative'>

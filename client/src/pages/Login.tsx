@@ -19,10 +19,14 @@ function Login() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await loginUser({ variables: { input: { email, password } } });
+      const { data } = await loginUser({
+        variables: { input: { email, password } },
+      });
+      const token = data.login;
+      localStorage.setItem('accessToken', token);
       navigate('/table-booking')
     } catch (error) {
-      console.error(error);
+      console.error('Login failed', error);
     }
   };
 

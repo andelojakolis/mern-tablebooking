@@ -30,8 +30,9 @@ async function bootstrap(){
         schema,
         context: (ctx: Context) => {
             const context = ctx
-            if(ctx.req.cookies.accessToken) {
-                const user = verifyJwt<User>(ctx.req.cookies.accessToken)
+            const token = ctx.req.headers.authorization?.split(' ')[1];
+            if(token) {
+                const user = verifyJwt<User>(token)
                 context.user = user
             }
             return ctx;

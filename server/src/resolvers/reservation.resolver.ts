@@ -21,6 +21,7 @@ export default class ReservationResolver {
     return this.reservationService.createReservation({ ...input, user });
   }
 
+  //@Authorized()
   @Query(() => [Number])
   getReservations(@Arg("input") input: GetReservationInput) {
     return this.reservationService.getReservations(input);
