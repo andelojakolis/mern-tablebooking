@@ -15,8 +15,9 @@ import profile from './profile.svg';
 import search from './search.svg';
 import loader from './loader.svg';
 import hamburgerMenu from './hamburgerMenu.svg';
-import table from './table.png'
-import restaurant from './restaurant-floor-plan.jpg'
+import table from './table.png';
+import restaurant from './restaurant-floor-plan.jpg';
+import admin from './admin.svg';
 
 // Exporting type for SVG components, adjust this based on your SVG component props
 export type { SvgProps };
@@ -31,5 +32,6 @@ export {
   forkknife,
   hamburgerMenu,
   table,
-  restaurant
+  restaurant,
+  admin
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { CustomButton } from './';
 import { navlinks } from '../constants';
@@ -10,25 +10,30 @@ const Navbar: React.FC = () => {
   const [isActive, setIsActive] = useState<string>('dashboard');
   const [toggleDrawer, setToggleDrawer] = useState<boolean>(false);
 
+  const token = localStorage.getItem('accessToken');
+
   return (
     <div className="flex md:flex-row flex-col-reverse justify-end mb-[35px] gap-6">
       
       <div className='sm:flex hidden flex-row justify-end gap-4'>
           <CustomButton 
             btnType="button"
-            title={'loggedin' ? 'Book a table' : 'Login'}
-            styles={'loggedin' ? 'bg-[#fbe3e8]' : 'bg-[#ebf6f5]'}
+            title={token ? 'Book a table' : 'Login'}
+            styles={token ? 'bg-[#fbe3e8]' : 'bg-[#5cbdb9] text-white'}
             handleClick={() => {
-              if('loggedin') navigate('table-booking')
-              else 'Login'
+              if(token) navigate('/table-booking')
+              else navigate('/login')
             }}
           />
 
-          <Link to="/profile">
-            <div className='w-[52px] h-[52px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer'>
-              <img src={'userImg'} alt="user" className='w-[60%] h-[60%] object-contain'/>
+          {token ? (
+            <div className='flex justify-center items-center'>
+              <div className='w-[20px] h-[20px] rounded-full bg-[#2c2f32] ring ring-green-300 ring-offset-4 bg-green-500'></div>
             </div>
-          </Link>
+            ) : (
+            <div className='flex justify-center items-center'>
+              <div className='w-[20px] h-[20px] rounded-full bg-[#2c2f32] ring ring-red-300 ring-offset-4 bg-red-500'></div>
+            </div>)}
       </div>
 
       <div className='z-30 sm:hidden flex justify-between items-center relative'>
@@ -53,6 +58,10 @@ const Navbar: React.FC = () => {
                   setIsActive(link.name);
                   setToggleDrawer(false);
                   navigate(link.link);
+                  if(link.name === "logout") {
+                    localStorage.removeItem('accessToken');
+                    navigate('/');
+                  }
                 }}
               >
                 <img
@@ -70,11 +79,17 @@ const Navbar: React.FC = () => {
           <div className='flex mx-4'>
             <CustomButton 
               btnType="button"
-              title={'loggedin' ? 'Logout' : 'Login'}
-              styles={'loggedin' ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+              title={token ? 'Book a table' : 'Login'}
+              styles={token ? 'bg-[#fbe3e8]' : 'bg-[#5cbdb9] text-white'}
               handleClick={() => {
-                if('loggedin') navigate('table-booking')
-                else 'Login'
+                if(token) {
+                  setToggleDrawer(false);
+                  navigate('/table-booking');
+                } 
+                else {
+                  setToggleDrawer(false);
+                  navigate('/login');
+                }
               }}
             />
           </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { forkknife } from '../assets';
+import { forkknife, admin } from '../assets';
 import { navlinks } from '../constants';
 
 interface IconProps {
@@ -14,7 +14,7 @@ interface IconProps {
 }
 
 const Icon: React.FC<IconProps> = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
-  <div className={`w-[48px] h-[48px] rounded-[10px] ${isActive && isActive === name && 'bg-[#ebf6f5]'} flex justify-center items-center ${!disabled && 'cursor-pointer'} ${styles}`} onClick={handleClick}>
+  <div className={`w-[48px] h-[48px] rounded-[10px] ${isActive && isActive === name && 'bg-[black] opacity-25'} flex justify-center items-center ${!disabled && 'cursor-pointer'} ${styles}`} onClick={handleClick}>
     {!isActive ? (
       <img src={imgUrl} alt="restaurant_logo" className='w-1/2 h-1/2'/>
     ) : (
@@ -53,6 +53,7 @@ const Sidebar: React.FC = () => {
             />  
           ))}
         </div>
+        <Icon styles="bg-[#fbe3e8] cursor-pointer text-[#5cbdb9]" imgUrl={admin} />
       </div>
     </div>
   )
