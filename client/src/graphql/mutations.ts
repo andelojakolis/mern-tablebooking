@@ -22,8 +22,3 @@ mutation CreateReservation($input: CreateReservationInput!){
     mealType
   }
 }`
-
-export const CHECK_AVAILABILITY = gql`
-query getReservations($input: GetReservationInput!) {
-	getReservations(input: $input)
-}`

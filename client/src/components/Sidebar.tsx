@@ -43,7 +43,8 @@ const Sidebar: React.FC = () => {
               handleClick={() => {
                 if(!link.disabled){
                   if(link.name === "logout") {
-                    //logout;
+                    localStorage.removeItem('accessToken');
+                    navigate('/');
                   }
                   setIsActive(link.name);
                   navigate(link.link);

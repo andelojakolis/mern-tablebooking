@@ -3,22 +3,28 @@ import React, { useState, useEffect } from 'react'
 import Table from '../components/Table';
 import { restaurant } from '../assets';
 import client from '../graphql/auth';
-import { CHECK_AVAILABILITY, CREATE_RESERVATION } from '../graphql/mutations';
-import { useMutation } from '@apollo/client';
+import { CREATE_RESERVATION } from '../graphql/mutations';
+import { CHECK_AVAILABILITY } from '../graphql/queries';
+import { useMutation, useQuery } from '@apollo/client';
+//import { useNavigate } from 'react-router-dom';
 
 const TableBooking: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-  const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  //const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [time, setTime] = useState<string>('');
   const [persons, setPersons] = useState<number>(1);
-  const [mealType, setMealType] = useState<string>('lunch');
-  const [filterDate, setFilterDate] = useState('');
-  const [filterMealType, setFilterMealType] = useState('');
-  //const [isReserved, setIsReserved] = useState<number[]>([]);
+  //const [mealType, setMealType] = useState<string>('lunch');
+  const [filterDate, setFilterDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [filterMealType, setFilterMealType] = useState<string>('lunch');
+  const [isReserved, setIsReserved] = useState<number[]>([]);
+  //const navigate = useNavigate();
 
   const [createReservation] = useMutation(CREATE_RESERVATION, { client });
+  const  getReservationsArray = useQuery(CHECK_AVAILABILITY, {variables: {input: {date: filterDate, mealType: filterMealType}}});
+  
+  //console.log(getReservationsArray.data?.getReservations);
 
   const openModal = (index: number) => {
     setSelectedImageIndex(index);
@@ -86,12 +92,20 @@ const TableBooking: React.FC = () => {
     setFilterMealType(event.target.value);
   };
 
-  let fetch: number[] = [1,2,3];
+  useEffect(() => {
+    if (getReservationsArray.data?.getReservations) {
+      const reservedTableNumbers = getReservationsArray.data.getReservations.map(
+        (reservation: number) => reservation
+      );
 
-  const handleFilterSubmit = async () => {
-    //
-  };
-  console.log(fetch)
+      setIsReserved(reservedTableNumbers);
+    }
+  }, [getReservationsArray.data]);
+
+  // const handleFilterSubmit = async () => {
+    
+  // };
+  
 
   return (
     <div className='flex sm:flex-row flex-col relative'>
@@ -102,7 +116,7 @@ const TableBooking: React.FC = () => {
           key={index}
           index={index}
           handleImageClick={handleImageClick}
-          isReserved={fetch.includes(index + 1)}
+          isReserved={isReserved.includes(index + 1)}
         />
       ))}
     </div>
@@ -113,13 +127,13 @@ const TableBooking: React.FC = () => {
       <input type="radio" name="mealType" id="lunch" value="lunch" checked={filterMealType === 'lunch'} onChange={handleMealTypeChange} /><br />
       <label htmlFor="dinner">Dinner </label>
       <input type="radio" name="mealType" id="dinner" value="dinner" checked={filterMealType === 'dinner'} onChange={handleMealTypeChange} /><br />
-      <button
+      {/* <button
         className='font-epilogue font-semibold text-[16px] leading-[26px] text-[white] min-h-[52px] px-4 rounded-[10px] border border-solid border-[white] sm:ml-11 ml-7 mt-2 bg-[#5cbdb9]'
         type="submit"
         onClick={handleFilterSubmit}
       >
         Check availability
-      </button>
+      </button> */}
     </div>
       {isModalOpen && (
         <div onClick={handleModalClick} className='z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
@@ -133,7 +147,7 @@ const TableBooking: React.FC = () => {
                 </label><br /><br />
                 <label className='font-epilogue font-semibold'>
                   Date: 
-                  <input className='px-2' type="date" value={filterDate} onChange={(e) => setDate(e.target.value)} />
+                  <input className='px-2' type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
                 </label><br /><br />
                 <label className='font-epilogue font-semibold'>
                   Time:
@@ -145,11 +159,11 @@ const TableBooking: React.FC = () => {
                 </label><br /><br />
                 <div>
                   <label className='font-epilogue font-semibold'>
-                    <input type="radio" name="mealType" value="lunch" checked={filterMealType === 'lunch'} onChange={() => setMealType('lunch')} />
+                    <input type="radio" name="mealType" value="lunch" checked={filterMealType === 'lunch'} onChange={() => setFilterMealType('lunch')} />
                     Lunch
                   </label><br />
                   <label className='font-epilogue font-semibold'>
-                    <input type="radio" name="mealType" value="dinner" checked={filterMealType === 'dinner'} onChange={() => setMealType('dinner')} />
+                    <input type="radio" name="mealType" value="dinner" checked={filterMealType === 'dinner'} onChange={() => setFilterMealType('dinner')} />
                     Dinner
                   </label><br /><br />
                 </div>
