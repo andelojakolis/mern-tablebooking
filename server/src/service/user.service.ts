@@ -28,14 +28,14 @@ class UserService {
         }
         const token = signJwt(jwtPayload);
 
-        context.res.cookie("accessToken", token, {
-            maxAge: 3.154e10,
-            httpOnly: true,
-            domain: "localhost",
-            path: "/",
-            sameSite: "strict",
-            secure: process.env.NODE_ENV === "production",
-        })
+        // context.res.cookie("accessToken", token, {
+        //     maxAge: 3.154e10,
+        //     httpOnly: true,
+        //     domain: "localhost",
+        //     path: "/",
+        //     sameSite: "strict",
+        //     secure: process.env.NODE_ENV === "production",
+        // })
 
         return token;
     }

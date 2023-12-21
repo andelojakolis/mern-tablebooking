@@ -9,11 +9,16 @@ import {
       try {
         const { date, mealType } = input;
         const existingReservation = await this.getReservationsByDateAndMealType(date, mealType);
+        const reservationDate = new Date(date).getDate();
+        const now = new Date().getDate();
+        if (reservationDate < now) {
+          throw new ApolloError("Reservation date cannot be earlier than the current date.");
+        }
         if (existingReservation) {
           const isTableNumberUsed = existingReservation.tableInfo.some(info => info.tableNumber === input.tableNumber);
 
           if (isTableNumberUsed) {
-            throw new ApolloError('TableNumber is already used in the existing reservation.');
+            throw new ApolloError('Table Number is already used in the existing reservation.');
           }
           existingReservation.tableInfo.push({
             user: input.user,
@@ -52,12 +57,12 @@ import {
       try {
         const { date, mealType } = input;
         const data = await this.getReservationsByDateAndMealType(date, mealType);
-    
+        let tableNumberArray: number[] = [];
+
         if (!data) {
-          throw new ApolloError('There are no reservations');
-          return null; 
+          return tableNumberArray; 
         }
-        const tableNumberArray: number[] = data.tableInfo.map(tableNumber => tableNumber.tableNumber);
+        tableNumberArray = data.tableInfo.map(tableNumber => tableNumber.tableNumber);
         return tableNumberArray;
       } catch (error) {
         console.error('Error:', error);
