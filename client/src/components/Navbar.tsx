@@ -18,11 +18,15 @@ const Navbar: React.FC = () => {
       <div className='sm:flex hidden flex-row justify-end gap-4'>
           <CustomButton 
             btnType="button"
-            title={token ? 'Book a table' : 'Login'}
+            title={token ? 'Logout' : 'Login'}
             styles={token ? 'bg-[#fbe3e8]' : 'bg-[#5cbdb9] text-white'}
             handleClick={() => {
-              if(token) navigate('/table-booking')
-              else navigate('/login')
+              if(token) {
+                localStorage.removeItem('accessToken')
+                navigate('/')
+              } else {
+                navigate('/login')
+              }
             }}
           />
 
@@ -58,10 +62,6 @@ const Navbar: React.FC = () => {
                   setIsActive(link.name);
                   setToggleDrawer(false);
                   navigate(link.link);
-                  if(link.name === "logout") {
-                    localStorage.removeItem('accessToken');
-                    navigate('/');
-                  }
                 }}
               >
                 <img
@@ -79,14 +79,14 @@ const Navbar: React.FC = () => {
           <div className='flex mx-4'>
             <CustomButton 
               btnType="button"
-              title={token ? 'Book a table' : 'Login'}
+              title={token ? 'Logout' : 'Login'}
               styles={token ? 'bg-[#fbe3e8]' : 'bg-[#5cbdb9] text-white'}
               handleClick={() => {
                 if(token) {
                   setToggleDrawer(false);
-                  navigate('/table-booking');
-                } 
-                else {
+                  localStorage.removeItem('accessToken')
+                  navigate('/');
+                } else {
                   setToggleDrawer(false);
                   navigate('/login');
                 }

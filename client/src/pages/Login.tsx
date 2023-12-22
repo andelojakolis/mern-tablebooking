@@ -24,7 +24,7 @@ function Login() {
       });
       const token = data.login;
       localStorage.setItem('accessToken', token);
-      navigate('/table-booking')
+      navigate('/')
     } catch (error) {
       console.error('Login failed', error);
     }

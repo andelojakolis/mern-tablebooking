@@ -42,10 +42,6 @@ const Sidebar: React.FC = () => {
               isActive={isActive}
               handleClick={() => {
                 if(!link.disabled){
-                  if(link.name === "logout") {
-                    localStorage.removeItem('accessToken');
-                    navigate('/');
-                  }
                   setIsActive(link.name);
                   navigate(link.link);
                 }
@@ -53,7 +49,7 @@ const Sidebar: React.FC = () => {
             />  
           ))}
         </div>
-        <Icon styles="bg-[#fbe3e8] cursor-pointer text-[#5cbdb9]" imgUrl={admin} />
+        <Icon styles="bg-[#fbe3e8] cursor-pointer text-[#5cbdb9] hover:scale-105" imgUrl={admin} />
       </div>
     </div>
   )

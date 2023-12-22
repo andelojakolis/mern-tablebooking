@@ -6,25 +6,19 @@ import client from '../graphql/auth';
 import { CREATE_RESERVATION } from '../graphql/mutations';
 import { CHECK_AVAILABILITY } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
-//import { useNavigate } from 'react-router-dom';
 
 const TableBooking: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-  //const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [time, setTime] = useState<string>('');
   const [persons, setPersons] = useState<number>(1);
-  //const [mealType, setMealType] = useState<string>('lunch');
   const [filterDate, setFilterDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [filterMealType, setFilterMealType] = useState<string>('lunch');
   const [isReserved, setIsReserved] = useState<number[]>([]);
-  //const navigate = useNavigate();
 
   const [createReservation] = useMutation(CREATE_RESERVATION, { client });
-  const  getReservationsArray = useQuery(CHECK_AVAILABILITY, {variables: {input: {date: filterDate, mealType: filterMealType}}});
-  
-  //console.log(getReservationsArray.data?.getReservations);
+  const  {data, refetch} = useQuery(CHECK_AVAILABILITY, {variables: {input: {date: filterDate, mealType: filterMealType}}});
 
   const openModal = (index: number) => {
     setSelectedImageIndex(index);
@@ -55,12 +49,11 @@ const TableBooking: React.FC = () => {
       persons,
       mealType: filterMealType,
     };
-    // send to backend
     try {
       await createReservation({
         variables: { input: formData },
       });
-
+      refetch();
       closeModal();
     } catch (error) {
       console.error('Error creating reservation:', error);
@@ -93,19 +86,14 @@ const TableBooking: React.FC = () => {
   };
 
   useEffect(() => {
-    if (getReservationsArray.data?.getReservations) {
-      const reservedTableNumbers = getReservationsArray.data.getReservations.map(
+    if (data?.getReservations) {
+      const reservedTableNumbers = data.getReservations.map(
         (reservation: number) => reservation
       );
 
       setIsReserved(reservedTableNumbers);
     }
-  }, [getReservationsArray.data]);
-
-  // const handleFilterSubmit = async () => {
-    
-  // };
-  
+  }, [data]);
 
   return (
     <div className='flex sm:flex-row flex-col relative'>
@@ -127,14 +115,7 @@ const TableBooking: React.FC = () => {
       <input type="radio" name="mealType" id="lunch" value="lunch" checked={filterMealType === 'lunch'} onChange={handleMealTypeChange} /><br />
       <label htmlFor="dinner">Dinner </label>
       <input type="radio" name="mealType" id="dinner" value="dinner" checked={filterMealType === 'dinner'} onChange={handleMealTypeChange} /><br />
-      {/* <button
-        className='font-epilogue font-semibold text-[16px] leading-[26px] text-[white] min-h-[52px] px-4 rounded-[10px] border border-solid border-[white] sm:ml-11 ml-7 mt-2 bg-[#5cbdb9]'
-        type="submit"
-        onClick={handleFilterSubmit}
-      >
-        Check availability
-      </button> */}
-    </div>
+      </div>
       {isModalOpen && (
         <div onClick={handleModalClick} className='z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
           <div className='bg-white p-8 rounded shadow-lg'>

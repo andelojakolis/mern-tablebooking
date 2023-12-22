@@ -1,4 +1,4 @@
-import { book, dashboard, logout } from '../assets';
+import { book, dashboard } from '../assets';
 
 export interface NavLink {
     name: string;
@@ -9,19 +9,14 @@ export interface NavLink {
 
 export const navlinks: NavLink[] = [
   {
-    name: 'dashboard',
+    name: 'Home',
     imgUrl: dashboard,
     link: '/',
   },
   {
-    name: 'bookTable',
+    name: 'Book a table',
     imgUrl: book,
     link: '/table-booking',
-  },
-  {
-    name: 'logout',
-    imgUrl: logout,
-    link: '/',
   },
 ];
 
