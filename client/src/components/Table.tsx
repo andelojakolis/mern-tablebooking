@@ -1,13 +1,14 @@
 import React from 'react'
-import { table } from '../assets';
+import { table, cancel } from '../assets';
 import { tableStyles } from '../constants';
 interface TableProps {
   index: number;
   handleImageClick: (index: number) => void;
   isReserved: boolean;
+  isMyTable: boolean;
 }
 
-const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved }) => {
+const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved, isMyTable }) => {
   
   const handleClick = () => {
     if (!isReserved) {
@@ -22,6 +23,11 @@ const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved }) =>
         src={table}
         alt="Table image"
       />
+      {isMyTable && (
+        <button className="absolute top-0 right-0 w-[25px] h-[25px]">
+          <img src={cancel} alt="Cancel icon" />
+        </button>
+      )}
     </div>
   );
 };

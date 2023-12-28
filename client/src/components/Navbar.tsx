@@ -23,6 +23,7 @@ const Navbar: React.FC = () => {
             handleClick={() => {
               if(token) {
                 localStorage.removeItem('accessToken')
+                localStorage.removeItem('userID')
                 navigate('/')
               } else {
                 navigate('/login')
@@ -85,6 +86,7 @@ const Navbar: React.FC = () => {
                 if(token) {
                   setToggleDrawer(false);
                   localStorage.removeItem('accessToken')
+                  localStorage.removeItem('userID')
                   navigate('/');
                 } else {
                   setToggleDrawer(false);

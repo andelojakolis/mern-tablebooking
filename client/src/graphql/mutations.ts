@@ -11,9 +11,7 @@ mutation CreateUser($input: CreateUserInput!) {
 `;
 
 export const LOGIN_USER = gql`
-mutation LoginUser($input: LoginInput!) {
-  login(input: $input)
-}`
+mutation login($input: LoginInput!) {login(input: $input) {token userId}}`
 
 export const CREATE_RESERVATION = gql`
 mutation CreateReservation($input: CreateReservationInput!){

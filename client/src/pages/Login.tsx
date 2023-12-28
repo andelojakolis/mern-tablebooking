@@ -22,8 +22,10 @@ function Login() {
       const { data } = await loginUser({
         variables: { input: { email, password } },
       });
-      const token = data.login;
+      const token = data.login.token;
+      const userID = data.login.userId;
       localStorage.setItem('accessToken', token);
+      localStorage.setItem('userID', userID);
       navigate('/')
     } catch (error) {
       console.error('Login failed', error);

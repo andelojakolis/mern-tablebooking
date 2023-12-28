@@ -4,7 +4,7 @@ import Table from '../components/Table';
 import { restaurant } from '../assets';
 import client from '../graphql/auth';
 import { CREATE_RESERVATION } from '../graphql/mutations';
-import { CHECK_AVAILABILITY } from '../graphql/queries';
+import { CHECK_AVAILABILITY, IS_MY_TABLE } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
 
 const TableBooking: React.FC = () => {
@@ -16,9 +16,24 @@ const TableBooking: React.FC = () => {
   const [filterDate, setFilterDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [filterMealType, setFilterMealType] = useState<string>('lunch');
   const [isReserved, setIsReserved] = useState<number[]>([]);
+  const [isMyTable, setIsMyTable] = useState<number[]>([]);
+  const [shouldExecuteDependentQuery, setShouldExecuteDependentQuery] = useState(false);
 
   const [createReservation] = useMutation(CREATE_RESERVATION, { client });
-  const  {data, refetch} = useQuery(CHECK_AVAILABILITY, {variables: {input: {date: filterDate, mealType: filterMealType}}});
+  const { data: checkAvailability, refetch: refetchAvailability } = useQuery(CHECK_AVAILABILITY, {
+    variables: { input: { date: filterDate, mealType: filterMealType } },
+    onCompleted: () => setShouldExecuteDependentQuery(true),
+  });
+  // const { data: meData } = useQuery(ME, { client });
+  // const userId = meData?.me?._id;
+  // console.log(userId)
+  const userId = localStorage.getItem('userID');
+
+  const { data: checkIsMyTable, refetch: refetchMyTable } = useQuery(IS_MY_TABLE, {
+    variables: { input: { date: filterDate, mealType: filterMealType, myId: userId } },
+    skip: !shouldExecuteDependentQuery,
+    onError: (error) => console.error('Error in checkIsMyTable query:', error),
+  });
 
   const openModal = (index: number) => {
     setSelectedImageIndex(index);
@@ -53,7 +68,8 @@ const TableBooking: React.FC = () => {
       await createReservation({
         variables: { input: formData },
       });
-      refetch();
+      refetchAvailability();
+      refetchMyTable();
       closeModal();
     } catch (error) {
       console.error('Error creating reservation:', error);
@@ -86,14 +102,30 @@ const TableBooking: React.FC = () => {
   };
 
   useEffect(() => {
-    if (data?.getReservations) {
-      const reservedTableNumbers = data.getReservations.map(
+    if (shouldExecuteDependentQuery) {
+      refetchMyTable();
+    }
+  }, [shouldExecuteDependentQuery]);
+
+  useEffect(() => {
+    if (checkAvailability?.getReservations) {
+      const reservedTableNumbers = checkAvailability.getReservations.map(
         (reservation: number) => reservation
       );
 
       setIsReserved(reservedTableNumbers);
     }
-  }, [data]);
+  }, [checkAvailability]);
+
+  useEffect(() => {
+    if (checkIsMyTable?.findMyReservations) {
+      const myTableNumbers = checkIsMyTable.findMyReservations.map(
+        (reservation: number) => reservation
+      );
+
+      setIsMyTable(myTableNumbers);
+    }
+  }, [checkIsMyTable]);
 
   return (
     <div className='flex sm:flex-row flex-col relative'>
@@ -105,6 +137,7 @@ const TableBooking: React.FC = () => {
           index={index}
           handleImageClick={handleImageClick}
           isReserved={isReserved.includes(index + 1)}
+          isMyTable={isMyTable.includes(index + 1)}
         />
       ))}
     </div>
