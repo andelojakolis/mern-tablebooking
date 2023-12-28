@@ -44,6 +44,15 @@ export class User {
 
 export const UserModel = getModelForClass(User)
 
+@ObjectType()
+export class LoginResponse {
+    @Field(() => String)
+    token: string;
+
+    @Field(() => String)
+    userId: string;
+}
+
 @InputType()
 export class CreateUserInput {
     @Field(() => String)

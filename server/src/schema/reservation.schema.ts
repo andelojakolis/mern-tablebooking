@@ -74,3 +74,18 @@ export class GetReservationInput {
   @IsString()
   mealType: string;
 }
+
+@InputType()
+export class GetMyReservationInput {
+  @Field()
+  @IsString()
+  date: string;
+
+  @Field()
+  @IsString()
+  mealType: string;
+
+  @Field()
+  @IsString()
+  myId: string;
+}
