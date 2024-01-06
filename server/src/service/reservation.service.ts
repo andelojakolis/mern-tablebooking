@@ -1,6 +1,6 @@
 import { ApolloError } from "apollo-server";
 import {
-    CreateReservationInput, GetReservationInput, GetMyReservationInput, ReservationModel
+    CreateReservationInput, GetReservationInput, GetMyReservationInput, ReservationModel, CancelReservationInput
   } from "../schema/reservation.schema";
 import { User, UserModel } from "../schema/user.schema";
   
@@ -78,6 +78,10 @@ class ReservationService {
     await UserModel.findByIdAndUpdate(userId, { $inc: { reserved: 1 } });
   }
 
+  async incrementCancelCounter(userId: string) {
+    await UserModel.findByIdAndUpdate(userId, { $inc: { cancelled: 1 } });
+  }
+
   async findMyReservations(input: GetMyReservationInput) {
     const reservation = await this.getReservationsByDateAndMealType(input.date, input.mealType);
     
@@ -91,6 +95,35 @@ class ReservationService {
     .map(filteredTable => filteredTable.tableNumber);
 
     return myReservationArray
+  }
+
+  async cancelReservation(input: CancelReservationInput & { user: User }) {
+    const { date, mealType, tableNumber, user } = input;
+    
+    const result = await ReservationModel.updateOne({
+      "date": date,
+      "mealType": mealType,
+      "tableInfo": {
+        $elemMatch: {
+          "tableNumber": tableNumber,
+          "user": user._id,
+        }
+      }
+    },
+    {
+      $pull: {
+        "tableInfo": {
+          "tableNumber": tableNumber,
+        }
+      }
+    },)
+
+    if(result.modifiedCount === 0) {
+      throw new ApolloError('User does not match for the specified tableNumber');
+    }
+
+    this.incrementCancelCounter(user._id);
+    return 'Reservation Cancelled'
   }
 }
 

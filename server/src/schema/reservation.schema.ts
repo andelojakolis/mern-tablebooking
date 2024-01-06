@@ -89,3 +89,19 @@ export class GetMyReservationInput {
   @IsString()
   myId: string;
 }
+
+@InputType()
+export class CancelReservationInput {
+  @Field(() => Int)
+  @Min(1)
+  @Max(10)
+  tableNumber: number;
+
+  @Field()
+  @IsString()
+  date: string;
+
+  @Field()
+  @IsString()
+  mealType: string;
+}

@@ -1,6 +1,6 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import {
-  CreateReservationInput, GetReservationInput, Reservation, GetMyReservationInput
+  CreateReservationInput, GetReservationInput, Reservation, GetMyReservationInput, CancelReservationInput
 } from "../schema/reservation.schema";
 import ReservationService from "../service/reservation.service";
 import Context from "../types/context";
@@ -29,5 +29,13 @@ export default class ReservationResolver {
   @Query(() => [Number])
   findMyReservations(@Arg("input") input: GetMyReservationInput) {
     return this.reservationService.findMyReservations(input);
+  }
+
+  @Authorized()
+  @Mutation(() => String)
+  cancelReservation(@Arg("input") input: CancelReservationInput,
+  @Ctx() context: Context) {
+    const user = context.user!;
+    return this.reservationService.cancelReservation({...input, user});
   }
 }
