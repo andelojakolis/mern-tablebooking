@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Table from '../components/Table';
 import { restaurant } from '../assets';
 import client from '../graphql/auth';
-import { CREATE_RESERVATION } from '../graphql/mutations';
+import { CANCEL_RESERVATION, CREATE_RESERVATION } from '../graphql/mutations';
 import { CHECK_AVAILABILITY, IS_MY_TABLE } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
 
@@ -20,13 +20,12 @@ const TableBooking: React.FC = () => {
   const [shouldExecuteDependentQuery, setShouldExecuteDependentQuery] = useState(false);
 
   const [createReservation] = useMutation(CREATE_RESERVATION, { client });
+  const [cancelReservation] = useMutation(CANCEL_RESERVATION, { client });
   const { data: checkAvailability, refetch: refetchAvailability } = useQuery(CHECK_AVAILABILITY, {
     variables: { input: { date: filterDate, mealType: filterMealType } },
     onCompleted: () => setShouldExecuteDependentQuery(true),
   });
-  // const { data: meData } = useQuery(ME, { client });
-  // const userId = meData?.me?._id;
-  // console.log(userId)
+  
   const userId = localStorage.getItem('userID');
 
   const { data: checkIsMyTable, refetch: refetchMyTable } = useQuery(IS_MY_TABLE, {
@@ -76,6 +75,18 @@ const TableBooking: React.FC = () => {
     }
     closeModal();
   };
+
+  const handleCancelReservation = async (tableNumber: number) => {
+    try {
+      await cancelReservation({
+        variables: { input: {date: filterDate, mealType: filterMealType, tableNumber: tableNumber} },
+      });
+      refetchAvailability();
+      refetchMyTable();
+    } catch (error) {
+      console.error('Error canceling reservation:', error);
+    }
+  }; 
 
   useEffect(() => {
     const now = new Date();
@@ -138,6 +149,7 @@ const TableBooking: React.FC = () => {
           handleImageClick={handleImageClick}
           isReserved={isReserved.includes(index + 1)}
           isMyTable={isMyTable.includes(index + 1)}
+          onCancelReservation={handleCancelReservation}
         />
       ))}
     </div>

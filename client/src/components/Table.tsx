@@ -6,15 +6,22 @@ interface TableProps {
   handleImageClick: (index: number) => void;
   isReserved: boolean;
   isMyTable: boolean;
+  onCancelReservation: (index: number) => void;
 }
 
-const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved, isMyTable }) => {
+const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved, isMyTable, onCancelReservation }) => {
   
   const handleClick = () => {
     if (!isReserved) {
       handleImageClick(index + 1);
     }
   };
+
+  const handleCancelButtonClick = () => {
+    if (isMyTable) {
+      onCancelReservation(index + 1)
+    }
+  }
 
   return (
     <div className={tableStyles[index]} onClick={handleClick}>
@@ -24,7 +31,7 @@ const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved, isMy
         alt="Table image"
       />
       {isMyTable && (
-        <button className="absolute top-0 right-0 w-[25px] h-[25px]">
+        <button className="absolute top-0 right-0 w-[25px] h-[25px]" onClick={handleCancelButtonClick}>
           <img src={cancel} alt="Cancel icon" />
         </button>
       )}

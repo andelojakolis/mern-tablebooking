@@ -20,3 +20,8 @@ mutation CreateReservation($input: CreateReservationInput!){
     mealType
   }
 }`
+
+export const CANCEL_RESERVATION = gql`
+mutation CancelReservation($input: CancelReservationInput!){
+  cancelReservation(input: $input)
+}`
