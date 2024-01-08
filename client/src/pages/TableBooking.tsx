@@ -18,6 +18,8 @@ const TableBooking: React.FC = () => {
   const [isReserved, setIsReserved] = useState<number[]>([]);
   const [isMyTable, setIsMyTable] = useState<number[]>([]);
   const [shouldExecuteDependentQuery, setShouldExecuteDependentQuery] = useState(false);
+  const [isCancelConfirmationOpen, setIsCancelConfirmationOpen] = useState(false);
+  const [tableNumberToCancel, setTableNumberToCancel] = useState<number | null>(null);
 
   const [createReservation] = useMutation(CREATE_RESERVATION, { client });
   const [cancelReservation] = useMutation(CANCEL_RESERVATION, { client });
@@ -76,17 +78,34 @@ const TableBooking: React.FC = () => {
     closeModal();
   };
 
-  const handleCancelReservation = async (tableNumber: number) => {
-    try {
-      await cancelReservation({
-        variables: { input: {date: filterDate, mealType: filterMealType, tableNumber: tableNumber} },
-      });
-      refetchAvailability();
-      refetchMyTable();
-    } catch (error) {
-      console.error('Error canceling reservation:', error);
+  const openCancelConfirmation = (tableNumber: number) => {
+    setTableNumberToCancel(tableNumber);
+    setIsCancelConfirmationOpen(true);
+  };
+
+  const closeCancelConfirmation = () => {
+    setTableNumberToCancel(null);
+    setIsCancelConfirmationOpen(false);
+  };
+
+  const handleCancelReservation = (tableNumber: number) => {
+    openCancelConfirmation(tableNumber);
+  };
+
+  const confirmCancelReservation = async () => {
+    if (tableNumberToCancel !== null) {
+      try {
+        await cancelReservation({
+          variables: { input: { date: filterDate, mealType: filterMealType, tableNumber: tableNumberToCancel } },
+        });
+        refetchAvailability();
+        refetchMyTable();
+        closeCancelConfirmation();
+      } catch (error) {
+        console.error('Error canceling reservation:', error);
+      }
     }
-  }; 
+  };
 
   useEffect(() => {
     const now = new Date();
@@ -200,6 +219,21 @@ const TableBooking: React.FC = () => {
           </div>
         </div>
       )}
+
+      {isCancelConfirmationOpen && (
+              <div className='z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
+                <div className='bg-white p-8 rounded shadow-lg'>
+                  <div className='modal-content'>
+                    <h1 className='font-epilogue font-bold text-[#5cbdb9]'>Cancel Reservation</h1><br /><br />
+                    <p>Are you sure you want to cancel this reservation?</p>
+                    <div className="flex justify-between mt-4">
+                      <button className='font-epilogue font-semibold text-[16px] leading-[26px] text-[white] bg-[#5cbdb9] min-h-[52px] px-4 rounded-[10px] border border-solid border-[#fbe3e8]' onClick={confirmCancelReservation}>Yes</button>
+                      <button className='font-epilogue font-semibold text-[16px] leading-[26px] text-[#5cbdb9] bg-[#fbe3e8] min-h-[52px] px-4 rounded-[10px] border border-solid border-[#5cbdb9]' onClick={closeCancelConfirmation}>No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
     </div>
   )
 }
