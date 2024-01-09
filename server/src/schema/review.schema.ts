@@ -48,3 +48,25 @@ export class GetMyReviewsInput {
     @Field(() => String)
     userID: string;
 }
+
+@InputType()
+export class UpdateReviewInput {
+    @IsString()
+    @Field(() => String)
+    reviewID: string;
+
+    @IsString()
+    @Field(() => String)
+    reviewDescription: string;
+
+    @IsNumber()
+    @Field(() => Number)
+    rating: number;
+}
+
+@InputType()
+export class DeleteReviewInput {
+    @IsString()
+    @Field(() => String)
+    reviewId: string;
+}

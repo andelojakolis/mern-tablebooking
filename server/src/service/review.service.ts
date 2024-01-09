@@ -1,4 +1,5 @@
-import { CreateReviewInput, GetMyReviewsInput, ReviewModel } from "../schema/review.schema";
+import { ApolloError } from "apollo-server";
+import { CreateReviewInput, DeleteReviewInput, GetMyReviewsInput, ReviewModel, UpdateReviewInput } from "../schema/review.schema";
 import { User } from "../schema/user.schema";
 
 class ReviewService {
@@ -36,9 +37,33 @@ class ReviewService {
         }
     }
 
-    async updateMyReview(input: CreateReviewInput & { user: User }) {
-        // add to input -> id off review, 
-        // to be able to update by review id  
+    async updateReview(input: UpdateReviewInput & { user: User }) {
+        try {
+            const { reviewID, reviewDescription, rating, user } = input;
+            const review = await ReviewModel.findOne({ _id: reviewID, reviewerID: user._id });
+            if (!review) {
+                throw new ApolloError('This is not the review of the current user!');
+            }
+
+            const updateReview = await ReviewModel.findOneAndUpdate(
+                { _id: reviewID },
+                { reviewDescription, rating },
+                { new: true }
+            );
+            return updateReview;
+
+        } catch (error) {
+            console.error('Error updating my review: ', error);
+        } 
+    }
+
+    async deleteReview(input: DeleteReviewInput & { user: User}) {
+        try {
+            await ReviewModel.deleteOne({_id: input.reviewId, reviewerID: input.user._id});
+            return 'Succesfully deleted review!';
+        } catch (error) {
+            console.error('Error deleting review: ', error);
+        }
     }
 }
 

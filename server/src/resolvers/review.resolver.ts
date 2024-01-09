@@ -1,6 +1,6 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import ReviewService from "../service/review.service";
-import { CreateReviewInput, GetMyReviewsInput, Review } from "../schema/review.schema";
+import { CreateReviewInput, DeleteReviewInput, GetMyReviewsInput, Review, UpdateReviewInput } from "../schema/review.schema";
 import Context from "../types/context";
 
 
@@ -32,8 +32,15 @@ export default class ReviewResolver {
 
     @Authorized()
     @Mutation(() => Review)
-    updateMyReview(@Arg("input") input: CreateReviewInput, @Ctx() context: Context) {
+    updateMyReview(@Arg("input") input: UpdateReviewInput, @Ctx() context: Context) {
         const user = context.user!;
-        return this.reviewService.updateMyReview({...input, user});
+        return this.reviewService.updateReview({...input, user});
+    }
+
+    @Authorized()
+    @Mutation(() => String)
+    deleteMyReview(@Arg("input") input: DeleteReviewInput, @Ctx() context: Context) {
+        const user = context.user!;
+        return this.reviewService.deleteReview({...input, user});
     }
 }
