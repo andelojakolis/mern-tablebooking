@@ -25,3 +25,13 @@ export const CANCEL_RESERVATION = gql`
 mutation CancelReservation($input: CancelReservationInput!){
   cancelReservation(input: $input)
 }`
+
+export const CREATE_REVIEW = gql`
+mutation CreateReview($input: CreateReviewInput!){
+  createReview(input: $input){
+    reviewerID
+    reviewer
+    reviewDescription
+    rating
+  }
+}`
