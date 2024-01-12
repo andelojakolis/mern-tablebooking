@@ -1,6 +1,6 @@
 import { FaStar } from "react-icons/fa"
 
-interface ReviewCardProps {
+export interface ReviewCardProps {
     reviewer: string;
     rating: number;
     reviewDescription: string;
@@ -15,7 +15,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewer, rating, reviewDescrip
   const formattedDate = dateObject.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
   return (
-    <div className="bg-[#ebf6f5] w-[90%] h-[160px] m-4 rounded-lg flex flex-col border border-solid border-[#5cbdb9] relative">
+    <div className="bg-[white] w-[90%] h-[160px] m-4 rounded-lg flex flex-col border border-solid border-[#5cbdb9] relative">
           <div className="flex flex-row">
             <div className="w-[40px] h-[40px] border border-solid border-[#5cbdb9] rounded-full bg-[#fbe3e8] m-2 flex justify-center items-center sm:text-[25px] text-[16px] text-[#5cbdb9] font-bold">{initials}</div>
             <div className="w-auto h-[40px] flex justify-center items-center m-2 sm:text-[20px] text-[14px] text-[#5cbdb9] font-semibold">{reviewer}</div>

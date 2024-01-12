@@ -160,7 +160,7 @@ const TableBooking: React.FC = () => {
   return (
     <div className='flex sm:flex-row flex-col relative'>
       <div className='relative w-[90vw]'>
-      <img className='sm:h-[80vh] h-[50vh] m-auto sm:w-[60%]  z-0 rounded-lg' src={restaurant} alt="Restaurant Floor Plan" />
+      <img className='shadow-xl sm:h-[80vh] h-[50vh] m-auto sm:w-[60%]  z-0 rounded-lg' src={restaurant} alt="Restaurant Floor Plan" />
       {[...Array(10).keys()].map((index) => (
         <Table
           key={index}

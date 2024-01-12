@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { GET_USER_INFO } from "../graphql/queries";
+import { GET_LAST_THREE, GET_USER_INFO } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_REVIEW } from "../graphql/mutations";
 import client from '../graphql/auth';
+import { ReviewCard } from "../components";
+import { ReviewCardProps } from "../components/ReviewCard";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
 
   const token = localStorage.getItem("accessToken");
   const currentUserID = localStorage.getItem("userID");
+
+  const navigate = useNavigate();
+  const navigateToReviews = () => {
+    navigate('/review');
+  };
 
   const [ currentValue, setCurrentValue ] = useState(0);
   const [ hoverValue, setHoverValue ] = useState(undefined);
@@ -17,6 +25,7 @@ const Home = () => {
   const { data: getMyInfo, refetch: refetchMyInfo } = useQuery(GET_USER_INFO, {
     variables: { input: { _id: currentUserID } },
   });
+  const { data: getLastThree, refetch: refetchLastThree } = useQuery(GET_LAST_THREE);
   const [createReview] = useMutation(CREATE_REVIEW, { client })
 
   const handleClick = (value: number) => {
@@ -44,7 +53,7 @@ const Home = () => {
         },
       });
       refetchMyInfo();
-      // refetch last reviews
+      refetchLastThree();
       setCurrentValue(0);
       setHoverValue(undefined);
       setReviewDescription('');
@@ -54,8 +63,8 @@ const Home = () => {
   };
 
   return (
-    <div className="flex md:flex-row flex-col font-epilogue mx-3 w-[80vw] h-[80vh]">
-      <div className="md:w-[40%] w-[100%] h-[100%] bg-[white] m-2 rounded-lg border border-solid border-[#5cbdb9]">
+    <div className="flex md:flex-row flex-col font-epilogue mx-3 w-[80vw] md:h-[80vh] h-auto">
+      <div className="shadow-xl md:w-[40%] w-[100%] h-[100%] bg-[white] m-2 rounded-lg border border-solid border-[#5cbdb9]">
         <h1 className="font-epilogue font-bold text-[#5cbdb9] md:text-[40px] text-[20px] text-center m-2 mt-8">Welcome,</h1>
         <p className="font-epilogue md:text-[20px] text-[14px] text-center m-2">{token ? `to our restaurant dear ${getMyInfo?.getUserInfo.name.split(' ')[0]}, you can book your table or leave a review.` : "dear guest, please login or register if you don't have an account."}</p>
 
@@ -93,62 +102,18 @@ const Home = () => {
         )}
       </div>
 
-      <div className="md:w-[60%] w-[100%] h-[100%] bg-[white] m-2 rounded-lg border border-solid border-[#5cbdb9] flex flex-col justify-center items-center font-epilogue">
-        <div className="bg-[#ebf6f5] w-[90%] h-[160px] m-3 rounded-lg flex flex-col border border-solid border-[#5cbdb9] relative">
-          <div className="flex flex-row">
-            <div className="w-[40px] h-[40px] border border-solid border-[#5cbdb9] rounded-full bg-[#fbe3e8] m-2 flex justify-center items-center sm:text-[25px] text-[16px] text-[#5cbdb9] font-bold">AJ</div>
-            <div className="w-auto h-[40px] flex justify-center items-center m-2 sm:text-[20px] text-[14px] text-[#5cbdb9] font-semibold">Anđelo Jakoliš</div>
-            <div className="w-auto h-[40px] flex justify-center items-center m-2">
-            {[...Array(4)].map((_, index) => (
-                <FaStar 
-                  key={index}
-                  size={12}
-                  color={'#FFBA5A'}
-                  className="mr-2"
-                />
-              ))}
-            </div>
-          </div>
-          <div className="text-[14px] mx-3 my-2 line-clamp-2 h-[60px]">Lorem ipsum dolor, sit amet consectetur adipisicing elit</div>
-          <div className="text-[16px] text-[#a9a9a9] absolute bottom-[2px] right-[10px]">5 days ago</div>
-        </div>
-        <div className="bg-[#ebf6f5] w-[90%] h-[160px] m-4 rounded-lg flex flex-col border border-solid border-[#5cbdb9] relative">
-          <div className="flex flex-row">
-            <div className="w-[40px] h-[40px] border border-solid border-[#5cbdb9] rounded-full bg-[#fbe3e8] m-2 flex justify-center items-center sm:text-[25px] text-[16px] text-[#5cbdb9] font-bold">AJ</div>
-            <div className="w-auto h-[40px] flex justify-center items-center m-2 sm:text-[20px] text-[14px] text-[#5cbdb9] font-semibold">John Doe</div>
-            <div className="w-auto h-[40px] flex justify-center items-center m-2">
-            {[...Array(1)].map((_, index) => (
-                <FaStar 
-                  key={index}
-                  size={12}
-                  color={'#FFBA5A'}
-                  className="mr-2"
-                />
-              ))}
-            </div>
-          </div>
-          <div className="text-[14px] mx-3 my-2 line-clamp-2 h-[60px]">Lorem ipsum dolor, sit amet consectetur adipisicing elit.</div>
-          <div className="text-[16px] text-[#a9a9a9] absolute bottom-[2px] right-[10px]">2 days ago</div>
-        </div>
-        <div className="bg-[#ebf6f5] w-[90%] h-[160px] m-4 rounded-lg flex flex-col border border-solid border-[#5cbdb9] relative">
-          <div className="flex flex-row">
-            <div className="w-[40px] h-[40px] border border-solid border-[#5cbdb9] rounded-full bg-[#fbe3e8] m-2 flex justify-center items-center sm:text-[25px] text-[16px] text-[#5cbdb9] font-bold">AJ</div>
-            <div className="w-auto h-[40px] flex justify-center items-center m-2 sm:text-[20px] text-[14px] text-[#5cbdb9] font-semibold">Neki Tip</div>
-            <div className="w-auto h-[40px] flex justify-center items-center m-2">
-            {[...Array(3)].map((_, index) => (
-                <FaStar 
-                  key={index}
-                  size={12}
-                  color={'#FFBA5A'}
-                  className="mr-2"
-                />
-              ))}
-            </div>
-          </div>
-          <div className="text-[14px] mx-3 my-2 line-clamp-2 h-[60px]">Great food, great staff!!</div>
-          <div className="text-[16px] text-[#a9a9a9] absolute bottom-[2px] right-[10px]">3 days ago</div>
-        </div>
-        <a href="#" className="text-[14px] text-[#5cbdb9]">See all reviews...</a>
+      <div className="shadow-xl md:w-[60%] w-[100%] h-[100%] bg-[#fbe3e8] m-2 rounded-lg border border-solid border-[#5cbdb9] flex flex-col justify-center items-center font-epilogue">
+        {getLastThree?.getLastReviews.map((review: ReviewCardProps, index: number) => (
+          <ReviewCard 
+            key={index}
+            reviewer={review.reviewer}
+            rating={review.rating}
+            reviewDescription={review.reviewDescription}
+            createdAt={review.createdAt}
+          />
+        ))}
+
+        <a href="" onClick={navigateToReviews} className="text-[16px] text-[#a9a9a9]">See all reviews...</a>
       </div>
     </div>
   )
