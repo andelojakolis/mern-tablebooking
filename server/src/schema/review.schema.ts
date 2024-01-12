@@ -70,3 +70,14 @@ export class DeleteReviewInput {
     @Field(() => String)
     reviewId: string;
 }
+
+@InputType()
+export class PaginationInput {
+    @IsNumber()
+    @Field(() => Number, { defaultValue: 1 })
+    page: number;
+
+    @IsNumber()
+    @Field(() => Number, { defaultValue: 5 })
+    pageSize: number;
+}

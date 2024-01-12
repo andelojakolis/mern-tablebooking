@@ -1,6 +1,6 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Args, Authorized, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
 import ReviewService from "../service/review.service";
-import { CreateReviewInput, DeleteReviewInput, GetMyReviewsInput, Review, UpdateReviewInput } from "../schema/review.schema";
+import { CreateReviewInput, DeleteReviewInput, GetMyReviewsInput, PaginationInput, Review, UpdateReviewInput } from "../schema/review.schema";
 import Context from "../types/context";
 
 
@@ -43,4 +43,10 @@ export default class ReviewResolver {
         const user = context.user!;
         return this.reviewService.deleteReview({...input, user});
     }
+
+    @Query(() => [Review])
+    async getAllReviews(@Arg('input') input: PaginationInput) {
+        return this.reviewService.getPaginatedReviews(input);
+    }
+    
 }

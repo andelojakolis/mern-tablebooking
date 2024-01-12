@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server";
-import { CreateReviewInput, DeleteReviewInput, GetMyReviewsInput, ReviewModel, UpdateReviewInput } from "../schema/review.schema";
+import { CreateReviewInput, DeleteReviewInput, GetMyReviewsInput, PaginationInput, Review, ReviewModel, UpdateReviewInput } from "../schema/review.schema";
 import { User } from "../schema/user.schema";
 
 class ReviewService {
@@ -63,6 +63,17 @@ class ReviewService {
             return 'Succesfully deleted review!';
         } catch (error) {
             console.error('Error deleting review: ', error);
+        }
+    }
+
+    async getPaginatedReviews(input: PaginationInput) {
+        try {
+            const { page, pageSize } = input;
+            const skip = (page - 1) * pageSize;
+            const paginatedReviews = await ReviewModel.find().sort({ createdAt: -1 }).skip(skip).limit(pageSize);
+            return paginatedReviews;
+        } catch (error) {
+            console.error('Error fetching paginated reviews: ', error);
         }
     }
 }
