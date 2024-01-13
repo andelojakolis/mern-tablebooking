@@ -1,16 +1,19 @@
 import { useState } from "react";
 import ReviewCard, { ReviewCardProps } from "../components/ReviewCard"
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import client from '../graphql/auth';
 import { GET_PAGINATED_REVIEWS } from "../graphql/queries";
+import { DELETE_REVIEW } from "../graphql/mutations";
 
 const Review = () => {
   const pageSize = 5;
-  const [page, setPage] = useState(1);
-  const [noMoreData, setNoMoreData] = useState(false);
+  const [ page, setPage ] = useState(1);
+  const [ noMoreData, setNoMoreData ] = useState(false);
 
-  const { loading, error, data, fetchMore } = useQuery(GET_PAGINATED_REVIEWS, {
+  const { loading, error, data, refetch, fetchMore } = useQuery(GET_PAGINATED_REVIEWS, {
     variables: { input: { page, pageSize } },
   });
+  const [deleteReview] = useMutation(DELETE_REVIEW, { client })
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -39,16 +42,30 @@ const Review = () => {
     setPage(page + 1);
   };
 
+  const handleDeleteReview = async (reviewId: string) => {
+    try {
+      await deleteReview({
+        variables: { input: { reviewId } },
+      });
+      refetch();
+    } catch (error) {
+      console.error("Error deleting review: ", error);
+    }
+  };
+
   return (
     <div className="flex md:flex-row flex-col justify-center items-center font-epilogue mx-3 w-[80vw] h-auto">
       <div className="shadow-xl md:w-[60%] w-[100%] h-[100%] bg-[#fbe3e8] m-2 rounded-lg border border-solid border-[#5cbdb9] flex flex-col justify-center items-center font-epilogue">
         {data?.getAllReviews.map((review: ReviewCardProps, index: number) => (
           <ReviewCard 
             key={index}
+            _id={review._id}
             reviewer={review.reviewer}
             rating={review.rating}
             reviewDescription={review.reviewDescription}
             createdAt={review.createdAt}
+            isMyReview={true}
+            onDeleteReview={handleDeleteReview}
           />
         ))}
 

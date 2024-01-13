@@ -1,18 +1,26 @@
-import { FaStar } from "react-icons/fa"
+import { FaStar } from "react-icons/fa";
+import { edit, trash } from "../assets"; 
 
 export interface ReviewCardProps {
+    _id: string;
     reviewer: string;
     rating: number;
     reviewDescription: string;
     createdAt: number;
+    isMyReview: boolean;
+    onDeleteReview: (id: string) => void;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ reviewer, rating, reviewDescription, createdAt }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ _id, reviewer, rating, reviewDescription, createdAt, isMyReview, onDeleteReview }) => {
 
   const initials = reviewer.split(' ').map((n) => n[0]).join('').toUpperCase();
 
   const dateObject = new Date(createdAt);
   const formattedDate = dateObject.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+  const handleDelete = () => {
+    onDeleteReview(_id);
+  };
 
   return (
     <div className="bg-[white] w-[90%] h-[160px] m-4 rounded-lg flex flex-col border border-solid border-[#5cbdb9] relative">
@@ -32,6 +40,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewer, rating, reviewDescrip
           </div>
           <div className="text-[14px] mx-3 my-2 sm:line-clamp-3 line-clamp-2 h-[60px]">{reviewDescription}</div>
           <div className="text-[16px] text-[#a9a9a9] absolute bottom-[2px] right-[10px]">{formattedDate}</div>
+          {isMyReview && (<div className="flex flex-row">
+            <img src={edit} alt="" className="ml-4 hover:scale-125 cursor-pointer hover:opacity-50" />
+            <img src={trash} alt="" className="mx-4 hover:scale-125 cursor-pointer hover:opacity-50" onClick={() => handleDelete()}/>
+          </div>
+          )}
         </div>
   )
 }

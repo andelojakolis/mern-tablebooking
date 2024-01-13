@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { GET_LAST_THREE, GET_USER_INFO } from "../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_REVIEW } from "../graphql/mutations";
+import { CREATE_REVIEW, DELETE_REVIEW } from "../graphql/mutations";
 import client from '../graphql/auth';
 import { ReviewCard } from "../components";
 import { ReviewCardProps } from "../components/ReviewCard";
@@ -26,7 +26,8 @@ const Home = () => {
     variables: { input: { _id: currentUserID } },
   });
   const { data: getLastThree, refetch: refetchLastThree } = useQuery(GET_LAST_THREE);
-  const [createReview] = useMutation(CREATE_REVIEW, { client })
+  const [createReview] = useMutation(CREATE_REVIEW, { client });
+  const [deleteReview] = useMutation(DELETE_REVIEW, { client });
 
   const handleClick = (value: number) => {
     setCurrentValue(value);
@@ -59,6 +60,17 @@ const Home = () => {
       setReviewDescription('');
     } catch (error) {
       console.error("Error creating review:", error);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId: string) => {
+    try {
+      await deleteReview({
+        variables: { input: { reviewId } },
+      });
+      refetchLastThree();
+    } catch (error) {
+      console.error("Error deleting review: ", error);
     }
   };
 
@@ -106,10 +118,13 @@ const Home = () => {
         {getLastThree?.getLastReviews.map((review: ReviewCardProps, index: number) => (
           <ReviewCard 
             key={index}
+            _id={review._id}
             reviewer={review.reviewer}
             rating={review.rating}
             reviewDescription={review.reviewDescription}
             createdAt={review.createdAt}
+            isMyReview={true}
+            onDeleteReview={handleDeleteReview}
           />
         ))}
 

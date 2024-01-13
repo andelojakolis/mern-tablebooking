@@ -12,7 +12,9 @@ import hamburgerMenu from './hamburgerMenu.svg';
 import table from './table.png';
 import restaurant from './restaurant-floor-plan.jpg';
 import admin from './admin.svg';
-import cancel from './cancel.svg'
+import cancel from './cancel.svg';
+import edit from './edit.svg';
+import trash from './trash.svg';
 
 // Exporting type for SVG components, adjust this based on your SVG component props
 export type { SvgProps };
@@ -26,5 +28,7 @@ export {
   table,
   restaurant,
   admin,
-  cancel
+  cancel,
+  edit,
+  trash
 };
