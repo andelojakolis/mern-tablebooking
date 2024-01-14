@@ -40,3 +40,13 @@ export const DELETE_REVIEW = gql`
 mutation deleteReview($input: DeleteReviewInput!) {
   deleteMyReview(input: $input)
 }`
+
+export const EDIT_REVIEW = gql`
+mutation updateReview($input: UpdateReviewInput!){
+  updateMyReview(input: $input){
+    reviewerID
+    reviewer
+    reviewDescription
+    rating
+  }
+}`

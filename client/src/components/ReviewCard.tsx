@@ -9,9 +9,11 @@ export interface ReviewCardProps {
     createdAt: number;
     isMyReview: boolean;
     onDeleteReview: (id: string) => void;
+    onEditReview: (id: string) => void;
+    isEdited: boolean;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ _id, reviewer, rating, reviewDescription, createdAt, isMyReview, onDeleteReview }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ _id, reviewer, rating, reviewDescription, createdAt, isMyReview, onDeleteReview, onEditReview, isEdited }) => {
 
   const initials = reviewer.split(' ').map((n) => n[0]).join('').toUpperCase();
 
@@ -20,6 +22,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ _id, reviewer, rating, reviewDe
 
   const handleDelete = () => {
     onDeleteReview(_id);
+  };
+
+  const handleEdit = () => {
+    onEditReview(_id);
   };
 
   return (
@@ -38,10 +44,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ _id, reviewer, rating, reviewDe
               ))}
             </div>
           </div>
-          <div className="text-[14px] mx-3 my-2 sm:line-clamp-3 line-clamp-2 h-[60px]">{reviewDescription}</div>
+          <div className="text-[14px] mx-3 my-2 sm:line-clamp-3 line-clamp-2 h-[60px]">{reviewDescription} <span className="text-[#a9a9a9]">{isEdited ? '(Edited!)': ''}</span></div>
           <div className="text-[16px] text-[#a9a9a9] absolute bottom-[2px] right-[10px]">{formattedDate}</div>
           {isMyReview && (<div className="flex flex-row">
-            <img src={edit} alt="" className="ml-4 hover:scale-125 cursor-pointer hover:opacity-50" />
+            <img src={edit} alt="" className="ml-4 hover:scale-125 cursor-pointer hover:opacity-50" onClick={() => handleEdit()}/>
             <img src={trash} alt="" className="mx-4 hover:scale-125 cursor-pointer hover:opacity-50" onClick={() => handleDelete()}/>
           </div>
           )}

@@ -23,6 +23,7 @@ query {
 	  reviewDescription
 	  rating
 	  createdAt
+	  isEdited
 	}
 }`
 
@@ -34,5 +35,6 @@ query getPaginatedReviews($input: PaginationInput!){
 	  reviewDescription
 	  rating
 	  createdAt
+	  isEdited
 	}
 }`
