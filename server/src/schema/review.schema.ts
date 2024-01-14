@@ -27,6 +27,10 @@ export class Review {
     @Field(() => Number)
     @prop({ required: true, default: () => Date.now() })
     createdAt: number;
+
+    @Field(() => Boolean)
+    @prop({ default: false })
+    isEdited: boolean;
 }
 
 export const ReviewModel = getModelForClass<typeof Review>(Review);

@@ -47,7 +47,7 @@ class ReviewService {
 
             const updateReview = await ReviewModel.findOneAndUpdate(
                 { _id: reviewID },
-                { reviewDescription, rating },
+                { reviewDescription, rating, isEdited: true },
                 { new: true }
             );
             return updateReview;
@@ -59,8 +59,19 @@ class ReviewService {
 
     async deleteReview(input: DeleteReviewInput & { user: User}) {
         try {
-            await ReviewModel.deleteOne({_id: input.reviewId, reviewerID: input.user._id});
-            return 'Succesfully deleted review!';
+            const review = await ReviewModel.findOne({ _id: input.reviewId });
+
+            if (!review) {
+                throw new Error('Review not found');
+            }
+
+            if (review.reviewerID !== input.user._id) {
+                throw new Error('You can only delete your reviews');
+            }
+
+            await ReviewModel.deleteOne({ _id: input.reviewId });
+            return 'Successfully deleted review!';
+
         } catch (error) {
             console.error('Error deleting review: ', error);
         }
