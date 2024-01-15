@@ -194,7 +194,8 @@ const Home = () => {
             rating={review.rating}
             reviewDescription={review.reviewDescription}
             createdAt={review.createdAt}
-            isMyReview={true}
+            reviewerID={review.reviewerID}
+            isMyReview={review.reviewerID == currentUserID ? true : false}
             onDeleteReview={handleDeleteReview}
             onEditReview={handleEditReview}
             isEdited={review.isEdited}

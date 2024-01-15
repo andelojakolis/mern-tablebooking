@@ -20,6 +20,7 @@ query {
 	getLastReviews {
 	  _id
 	  reviewer
+	  reviewerID
 	  reviewDescription
 	  rating
 	  createdAt
@@ -32,6 +33,7 @@ query getPaginatedReviews($input: PaginationInput!){
 	getAllReviews(input: $input) {
 	  _id
 	  reviewer
+	  reviewerID
 	  reviewDescription
 	  rating
 	  createdAt

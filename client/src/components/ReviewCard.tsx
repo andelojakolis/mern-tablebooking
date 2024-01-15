@@ -11,6 +11,7 @@ export interface ReviewCardProps {
     onDeleteReview: (id: string) => void;
     onEditReview: (id: string) => void;
     isEdited: boolean;
+    reviewerID: string;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ _id, reviewer, rating, reviewDescription, createdAt, isMyReview, onDeleteReview, onEditReview, isEdited }) => {

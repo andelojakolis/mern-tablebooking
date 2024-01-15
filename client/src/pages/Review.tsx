@@ -8,6 +8,8 @@ import { FaStar } from "react-icons/fa";
 
 const Review = () => {
   const pageSize = 5;
+  const currentUserID = localStorage.getItem("userID");
+
   const [ page, setPage ] = useState(1);
   const [ noMoreData, setNoMoreData ] = useState(false);
   const [ isDeleteConfirmationOpen, setIsDeleteConfirmationOpen ] = useState(false);
@@ -132,7 +134,8 @@ const Review = () => {
             rating={review.rating}
             reviewDescription={review.reviewDescription}
             createdAt={review.createdAt}
-            isMyReview={true}
+            reviewerID={review.reviewerID}
+            isMyReview={review.reviewerID == currentUserID ? true : false}
             onDeleteReview={handleDeleteReview}
             onEditReview={handleEditReview}
             isEdited={review.isEdited}
