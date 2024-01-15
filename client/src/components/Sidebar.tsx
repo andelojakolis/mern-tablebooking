@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { forkknife, admin } from '../assets';
 import { navlinks } from '../constants';
+import { useQuery } from '@apollo/client';
+import { GET_USER_INFO } from '../graphql/queries';
 
 interface IconProps {
   styles?: string;
@@ -24,8 +26,15 @@ const Icon: React.FC<IconProps> = ({ styles, name, imgUrl, isActive, disabled, h
 ) 
 
 const Sidebar: React.FC = () => {
+  
+  const currentUserID = localStorage.getItem('userID');
+
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState<string>('dashboard');
+
+  const { data } = useQuery(GET_USER_INFO, {
+    variables: { input: { _id: currentUserID } },
+  });
 
   return (
     <div className="flex justify-between items-center flex-col sticky top-5 h-[93vh]">
@@ -49,7 +58,9 @@ const Sidebar: React.FC = () => {
             />  
           ))}
         </div>
-        <Icon styles="bg-[#fbe3e8] cursor-pointer text-[#5cbdb9] hover:scale-105" imgUrl={admin} />
+        {data?.getUserInfo.role == 'admin' && (
+          <Icon styles="bg-[#fbe3e8] cursor-pointer text-[#5cbdb9] hover:scale-105" imgUrl={admin} />
+        )}
       </div>
     </div>
   )
