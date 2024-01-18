@@ -24,7 +24,8 @@ class UserService {
         const jwtPayload = {
           _id: user.id,
           name: user.name,
-          email: user.email
+          email: user.email,
+          role: user.role
         }
         const token = signJwt(jwtPayload);
 

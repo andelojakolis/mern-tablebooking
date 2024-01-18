@@ -32,8 +32,8 @@ async function bootstrap(){
             const context = ctx
             const token = ctx.req.headers.authorization?.split(' ')[1];
             if(token) {
-                const user = verifyJwt<User>(token)
-                context.user = user
+                const user = verifyJwt<User>(token);
+                context.user = user;
             }
             return ctx;
         },
