@@ -1,4 +1,5 @@
-import { Reservation, ReservationModel, TableInfo } from "../schema/reservation.schema";
+import { ApolloError } from "apollo-server";
+import { CancelReservationInput, Reservation, ReservationModel, TableInfo } from "../schema/reservation.schema";
 import { UserModel } from "../schema/user.schema";
 
 class AdminService {
@@ -43,7 +44,33 @@ class AdminService {
         };
     
         return reservationWithUserInfo;
-    }  
+    }
+    
+    async cancelReservationAdmin(input: CancelReservationInput) {
+        try {
+            const { date, mealType, tableNumber } = input;
+        
+            const result = await ReservationModel.updateOne({
+                "date": date,
+                "mealType": mealType,
+                },
+                {
+                $pull: {
+                    "tableInfo": {
+                    "tableNumber": tableNumber,
+                    }
+                }
+            },)
+
+            if(result.modifiedCount === 0) {
+                throw new ApolloError('Reservation does not exist!');
+              }
+            
+            return 'Reservation Cancelled'
+        } catch (error) {
+            console.error("Error cancelling reservation by admin:", error);
+        }
+    }
 }
 
 export default AdminService;
