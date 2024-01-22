@@ -5,7 +5,7 @@ interface TableProps {
   index: number;
   handleImageClick: (index: number) => void;
   isReserved: boolean;
-  isMyTable: boolean;
+  isMyTable?: boolean;
   onCancelReservation: (index: number) => void;
 }
 

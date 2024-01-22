@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navbar, Sidebar } from './components'
 import { Home, TableBooking, Register, Login } from './pages'
 import Review from './pages/Review';
+import Admin from './pages/Admin';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/table-booking' element={<TableBooking />} />
               <Route path='/review' element={<Review />} />
+              <Route path='/admin' element={<Admin />} />
             </Routes>
         </div>
       </div>

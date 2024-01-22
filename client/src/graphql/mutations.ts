@@ -50,3 +50,8 @@ mutation updateReview($input: UpdateReviewInput!){
     rating
   }
 }`
+
+export const CANCEL_RESERVATION_ADMIN = gql`
+mutation CancelReservationAdmin($input: CancelReservationInput!){
+  cancelReservationAdmin(input: $input)
+}`

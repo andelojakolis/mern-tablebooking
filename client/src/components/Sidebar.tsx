@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
           ))}
         </div>
         {data?.getUserInfo.role == 'admin' && (
-          <Icon styles="bg-[#fbe3e8] cursor-pointer text-[#5cbdb9] hover:scale-105" imgUrl={admin} />
+          <Icon styles="bg-[#fbe3e8] cursor-pointer text-[#5cbdb9] hover:scale-105" imgUrl={admin} handleClick={() => navigate('/admin')} />
         )}
       </div>
     </div>
