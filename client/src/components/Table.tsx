@@ -3,16 +3,18 @@ import { table, cancel } from '../assets';
 import { tableStyles } from '../constants';
 interface TableProps {
   index: number;
-  handleImageClick: (index: number) => void;
+  handleImageClick?: (index: number) => void;
+  handleImageOnMouseEnter?: (index: number) => void;
+  handleImageOnMouseLeave?: (index: number) => void;
   isReserved: boolean;
   isMyTable?: boolean;
   onCancelReservation: (index: number) => void;
 }
 
-const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved, isMyTable, onCancelReservation }) => {
+const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved, isMyTable, onCancelReservation, handleImageOnMouseEnter, handleImageOnMouseLeave }) => {
   
   const handleClick = () => {
-    if (!isReserved) {
+    if (!isReserved && handleImageClick) {
       handleImageClick(index + 1);
     }
   };
@@ -23,12 +25,26 @@ const Table: React.FC<TableProps> = ({ index, handleImageClick, isReserved, isMy
     }
   }
 
+  const handleOnMouseEnter: React.MouseEventHandler<HTMLImageElement> = () => {
+    if (handleImageOnMouseEnter) {
+      handleImageOnMouseEnter(index + 1);
+    }
+  }
+
+  const handleOnMouseLeave: React.MouseEventHandler<HTMLImageElement> = () => {
+    if (handleImageOnMouseLeave) {
+      handleImageOnMouseLeave(index + 1);
+    }
+  }
+
   return (
     <div className={tableStyles[index]} onClick={handleClick}>
       <img
         className={`${isReserved ? 'opacity-25' : 'opacity-75 cursor-pointer'} sm:w-[65px] sm:h-[65px] w-[30px] h-[30px]`}
         src={table}
         alt="Table image"
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
       />
       {isMyTable && (
         <button className="absolute top-0 right-0 w-[25px] h-[25px]" onClick={handleCancelButtonClick}>

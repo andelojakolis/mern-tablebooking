@@ -40,3 +40,8 @@ query getPaginatedReviews($input: PaginationInput!){
 	  isEdited
 	}
 }`
+
+export const GET_RESERVATION_INFO_ADMIN = gql`
+query getReservationsAdmin($input: GetMyReservationInput!) {
+	getReservationsAdmin(input: $input) {_id mealType date tableInfo {user {_id  name email cancelled role reserved} tableNumber time persons} }
+}`

@@ -4,17 +4,18 @@ import Table from "../components/Table"
 import { useMutation, useQuery } from "@apollo/client";
 import { CANCEL_RESERVATION_ADMIN } from "../graphql/mutations";
 import client from '../graphql/auth';
-import { CHECK_AVAILABILITY, GET_USER_INFO } from "../graphql/queries";
+import { CHECK_AVAILABILITY, GET_RESERVATION_INFO_ADMIN, GET_USER_INFO } from "../graphql/queries";
 
 
 const Admin = () => {
 
-    const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
     const [filterDate, setFilterDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [filterMealType, setFilterMealType] = useState<string>('lunch');
     const [isReserved, setIsReserved] = useState<number[]>([]);
     const [isCancelConfirmationOpen, setIsCancelConfirmationOpen] = useState(false);
     const [tableNumberToCancel, setTableNumberToCancel] = useState<number | null>(null);
+    const [isInfoOpen, setIsInfoOpen] = useState(false);
+    const [hoveredTableInfo, setHoveredTableInfo] = useState<any | null>(null);
 
     const [cancelReservation] = useMutation(CANCEL_RESERVATION_ADMIN, { client });
     const { data: checkAvailability, refetch: refetchAvailability } = useQuery(CHECK_AVAILABILITY, {
@@ -27,15 +28,36 @@ const Admin = () => {
     const { data: getMyInfo, refetch: refetchMyInfo } = useQuery(GET_USER_INFO, {
         variables: { input: { _id: userId } },
     });
+    const { data: getReservationInfo, refetch: refetchReservationInfo } = useQuery(GET_RESERVATION_INFO_ADMIN, {
+      variables: {
+        input: {
+          date: filterDate,
+          mealType: filterMealType,
+          myId: userId
+        }
+      }
+    });
 
     const isAdmin = getMyInfo?.getUserInfo.role === 'admin';
-    console.log(isAdmin);
 
-    console.log(getMyInfo?.getUserInfo.role);
-
-    const handleImageClick = (index: number) => {
-        // openModal(index);
+    const openReservationInfo = () => {
+      setIsInfoOpen(true);
     };
+  
+    const closeReservationInfo = () => {
+      setIsInfoOpen(false);
+    };
+
+    const handleImageOnMouse = (index: number) => {
+        openReservationInfo();
+        const hoveredTableNumber = index;
+        const hoveredTable = getReservationInfo?.getReservationsAdmin?.tableInfo.find((info: any) => info.tableNumber === hoveredTableNumber);
+        setHoveredTableInfo(hoveredTable || null);
+    };
+
+    const handleImageOnMouseLeave = () => {
+      closeReservationInfo();
+  };
 
     const openCancelConfirmation = (tableNumber: number) => {
         setTableNumberToCancel(tableNumber);
@@ -58,6 +80,8 @@ const Admin = () => {
               variables: { input: { date: filterDate, mealType: filterMealType, tableNumber: tableNumberToCancel } },
             });
             refetchAvailability();
+            refetchMyInfo();
+            refetchReservationInfo();
             closeCancelConfirmation();
           } catch (error) {
             console.error('Error canceling reservation:', error);
@@ -99,6 +123,29 @@ const Admin = () => {
         }
       }, [checkAvailability]);
 
+      const calculateRatio = (reserved: number | undefined, cancelled: number | undefined): number => {
+        if (reserved !== undefined && cancelled !== undefined) {
+          const total = reserved + cancelled;
+          return (reserved / total) * 100;
+        }
+        return 0;
+      };
+
+      const getColorByRatio = (reserved: number | undefined, cancelled: number | undefined): string => {
+        const ratio = calculateRatio(reserved, cancelled);
+      
+        switch (true) {
+          case ratio >= 50 && ratio <= 70:
+            return 'red';
+          case ratio > 70 && ratio <= 90:
+            return 'orange';
+          case ratio > 90 && ratio <= 100:
+            return 'green';
+          default:
+            return '#5cbdb9';
+        }
+      };
+
       return (
         <>
           {token && isAdmin ? (
@@ -113,7 +160,8 @@ const Admin = () => {
                   <Table
                     key={index}
                     index={index}
-                    handleImageClick={handleImageClick}
+                    handleImageOnMouseEnter={handleImageOnMouse}
+                    handleImageOnMouseLeave={handleImageOnMouseLeave}
                     isReserved={isReserved.includes(index + 1)}
                     isMyTable={isReserved.includes(index + 1)}
                     onCancelReservation={handleCancelReservation}
@@ -144,6 +192,20 @@ const Admin = () => {
                   onChange={handleMealTypeChange}
                 />
               </div>
+              {isInfoOpen && hoveredTableInfo && (
+                <div className="absolute top-0 left-0 w-auto h-auto bg-white p-8 rounded shadow-lg">
+                  <div className="font-epilogue font-bold text-[#5cbdb9]">
+                    Table: {hoveredTableInfo?.tableNumber} <br />
+                    Name: {hoveredTableInfo?.user.name} <br />
+                    Persons: {hoveredTableInfo?.persons} <br />
+                    Time: {hoveredTableInfo?.time} <br />
+                    <span style={{ color: getColorByRatio(hoveredTableInfo?.user.reserved, hoveredTableInfo?.user.cancelled) }}>
+                      Ratio: {calculateRatio(hoveredTableInfo?.user.reserved, hoveredTableInfo?.user.cancelled).toFixed(2)}%
+                    </span>
+
+                  </div>
+                </div>
+              )}
               {isCancelConfirmationOpen && (
                 <div className='z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
                   <div className='bg-white p-8 rounded shadow-lg'>
